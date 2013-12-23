@@ -1,0 +1,10 @@
+﻿{
+	"type": "module", 
+	"moduleName": "WWWJDIC Translator",
+	"botName": "[Rapier]",
+	"hashKey": "test",
+	"channels": [
+		"#project-precure"
+	],
+	"commands": ["!t"]
+}
