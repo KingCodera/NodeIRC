@@ -1,0 +1,25 @@
+[
+    {
+        "server": "irc.rizon.net",
+        "port": 6667,
+        "nick": "[Rapier]",
+        "name": "Rapier",
+        "pass": "yourmom",
+        "logLevel": "info",
+        "commandChar": "!",
+        "operators": [
+            "[raven]",
+            "altazure"
+        ],
+        "pOperators": [
+            "Orillion"
+        ],
+        "channels": [
+			{
+				"name": "#doki-development",
+				"mode": "operator",
+				"modules": []				
+			}			
+        ]
+    }
+]

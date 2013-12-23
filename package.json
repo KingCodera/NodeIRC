@@ -1,0 +1,16 @@
+{
+  "name": "NodeIRC",
+  "version": "0.1.0",
+  "description": "NodeIRC",
+  "main": "bouncer.js",
+  "author": {
+    "name": "Orillion",
+    "email": "Orillion.Lightning@gmail.com"
+  },
+  "dependencies": {
+    "nconf": ">= 0.6.9",
+    "irc": "~0.3.6",
+    "express": "~3.4.7",
+    "colors": "~0.6.2"
+  }
+}

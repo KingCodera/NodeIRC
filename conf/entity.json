@@ -1,0 +1,9 @@
+{
+    "server": "irc.rizon.net",
+    "port": 6667,
+    "botName": "[Rapier]",
+    "userName": "Rapier",
+    "password": "odyssey",
+    "commandChar": "!",
+    "logging": false
+}

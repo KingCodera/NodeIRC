@@ -1,0 +1,6 @@
+﻿{
+	"hostName": "localhost",
+	"port": 1234,
+	"pass": "test",
+	"logLevel": "info"
+}
