@@ -2,27 +2,24 @@
 
 module.exports = Logger;
 
-Logger.prototype.prefix;
-Logger.prototype.logLevel;
-
 function Logger(pPrefix, pLogLevel) {    
     if (pPrefix == undefined) {        
-        prefix = "";
+        this.prefix = "";
     } else {
-        prefix = pPrefix + ": ";
+        this.prefix = pPrefix + ": ";
     }
-    logLevel = pLogLevel;
+    this.logLevel = pLogLevel;
 }
 
 Logger.prototype.isInfoLevel = function() {
-    switch (logLevel) {
+    switch (this.logLevel) {
         case "info": return true;
         default: return false;
     }
 }
 
 Logger.prototype.isWarningLevel = function() {
-    switch (logLevel) {
+    switch (this.logLevel) {
         case "info": return true;
         case "warning": return true;
         default: return false;
@@ -30,7 +27,7 @@ Logger.prototype.isWarningLevel = function() {
 }
 
 Logger.prototype.isErrorLevel = function() {
-    switch (logLevel) {
+    switch (this.logLevel) {
         case "info": return true;
         case "warning": return true;
         case "error": return true;
@@ -41,20 +38,20 @@ Logger.prototype.isErrorLevel = function() {
 Logger.prototype.info = function(message) {
     if (this.isInfoLevel()) {
         var string = "[" + "INFO".green + "] ";
-        console.log(string + prefix + message);
+        console.log(string + this.prefix + message);
     }
 }
 
 Logger.prototype.warning = function(message) {
     if (this.isWarningLevel()) {
         var string = "[" + "WARN".yellow + "] ";
-        console.log(string + prefix + message);
+        console.log(string + this.prefix + message);
     }
 }
 
 Logger.prototype.error = function(message) {
     if (this.isErrorLevel()) {
         var string = "[" + "FAIL".red + "] ";
-        console.log(string + prefix + message);
+        console.log(string + this.prefix + message);
     }
 }

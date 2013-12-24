@@ -5,6 +5,7 @@ var warningString = "[" + irc.colors.wrap("orange","WARN") + "] ";
 var errorString = "[" + irc.colors.wrap("light_red","FAIL") + "] ";
 
 module.exports = AgentLogger;
+
 AgentLogger.prototype.agent;
 AgentLogger.prototype.log;
 AgentLogger.prototype.logLevel;
@@ -13,6 +14,18 @@ function AgentLogger(agent) {
     this.agent = agent;
     this.logger = agent.logger;
     this.logLevel = agent.config.logLevel.toLowerCase();
+}
+
+AgentLogger.prototype.currentLogLevel = function() {
+    if (this.isInfoLevel()) {
+        return infoString;
+    } else if (this.isWarningLevel()) {
+        return warningString;
+    } else if (this.isErrorLevel()) {
+        return errorString;
+    } else {
+        return "[OFF]";
+    }
 }
 
 AgentLogger.prototype.updateLog = function(logLevel) {
