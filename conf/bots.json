@@ -5,21 +5,46 @@
         "nick": "[Rapier]",
         "name": "Rapier",
         "pass": "yourmom",
+		"allowUnidentified": false,
         "logLevel": "info",
         "commandChar": "!",
         "operators": [
-            "[raven]",
-            "altazure"
+            "altazure",
+            "yourmom"
         ],
         "pOperators": [
             "Orillion"
         ],
         "channels": [
-			{
-				"name": "#doki-development",
-				"mode": "operator",
-				"modules": []				
-			}			
+            {
+                "name": "#doki-development",
+                "mode": "operator",
+                "modules": []
+            }
+        ]
+    },
+    {
+        "server": "irc.shakeababy.net",
+        "port": 6667,
+        "nick": "[Raven]",
+        "name": "Raven",
+        "pass": "fail",
+		"allowUnidentified": false,
+        "logLevel": "info",
+        "commandChar": "!",
+        "operators": [
+            "altazure",
+            "yourmom"
+        ],
+        "pOperators": [
+            "Orillion"
+        ],
+        "channels": [
+            {
+                "name": "#doki-development",
+                "mode": "operator",
+                "modules": []
+            }
         ]
     }
 ]

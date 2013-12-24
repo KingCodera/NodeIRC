@@ -1,40 +1,39 @@
 ﻿var Logger = require('./Logger.js');
 var AgentLogger = require('./AgentLogger.js');
+var irc = require('irc');
 var config = require('./config.js');
+var colors = require('colors');
 
 config.setLog(new Logger(undefined, "info"));
 
+exports.getTime = getTime;
 exports.Logger = Logger;
 exports.AgentLogger = AgentLogger;
 exports.config = config;
 exports.arrayToLowerCase = arrayToLowerCase;
 exports.arrayToString = arrayToString;
 
-function arrayToLowerCase(array) {
-    return array.forEach(function(item) { 
-        return item.toLowerCase(); 
-    });
-
-    /*
+function arrayToLowerCase(array) {    
     var tmp = [];
     for (var i in array) {
         tmp.push(array[i].toLowerCase());
     }
-    return tmp;
-    */
+    return tmp;    
 }
 
 function arrayToString(array, color, type) {
     var string = "";
         
     for (var i in array) {
-        string += array[i];
+        tmpString = array[i];
 
         switch (type) {
-            case "console": string = string.color; break;
-            case "irc": string = irc.colors.wrap(color, string); break;
+            case "console": tmpString = tmpString.color; break;
+            case "irc": tmpString = irc.colors.wrap(color, tmpString); break;
             default: break;
         }
+
+        string += tmpString;
 
         if (i != array.length - 1) {            
             string += ", ";

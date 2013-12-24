@@ -29,16 +29,16 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="bot.js" />
-    <Compile Include="controller.js" />
+    <Compile Include="Agent.js" />
+    <Compile Include="Controller.js" />
     <Compile Include="bouncer.js" />
-    <Compile Include="moduleController.js" />
+    <Compile Include="ModuleController.js" />
     <Compile Include="test.js" />
-    <Compile Include="util\botLog.js" />
+    <Compile Include="Bane.js" />
+    <Compile Include="util\AgentLogger.js" />
     <Compile Include="util\config.js" />
-    <Compile Include="util\log.js" />
-    <Compile Include="util\register.js" />
-    <Compile Include="server.js" />
+    <Compile Include="util\Logger.js" />
+    <Compile Include="Server.js" />
     <Compile Include="testClient.js" />
     <Compile Include="util\util.js" />
     <Content Include="conf\botsBackup.json" />
