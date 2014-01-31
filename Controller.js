@@ -6,6 +6,7 @@ var colors = require('colors');
 var util = require('./util/util.js');
 var Agent = require('./Agent.js');
 var Server = require('./Server.js');
+var ModuleController = require('./ModuleController.js');
 
 module.exports = Controller;
 
@@ -29,7 +30,7 @@ function Controller() {
         for (var i in botsConfig) { 
             var botConfig = botsConfig[i];
             Controller.logger.info("Starting bot: " + botConfig.nick.blue);
-            var bot = new Agent(botConfig, Controller.botCloseFunc, Controller.botConfigFunc, srvConfig.logLevel);
+            var bot = new Agent(botConfig, Controller.botCloseFunc, Controller.botConfigFunc, srvConfig.logLevel);            
             Controller.bots.push(bot);
         }    
         Controller.logger.info("Done loading bots!");

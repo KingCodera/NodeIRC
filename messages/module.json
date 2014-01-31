@@ -1,10 +1,17 @@
 ﻿{
 	"type": "module", 
 	"moduleName": "WWWJDIC Translator",
-	"botName": "[Rapier]",
+	"moduleCode": "WJT",
+	"botName": "Severin",
 	"hashKey": "test",
-	"channels": [
-		"#project-precure"
+	"serviceType": [
+		"channel"
 	],
-	"commands": ["!t"]
+	"channels": [
+		"#doki-development",
+		"#doki-nihongo",
+		"#project-precure",
+		"#doki"
+	],
+	"commands": ["!t", "!dict", "!unload"]
 }
