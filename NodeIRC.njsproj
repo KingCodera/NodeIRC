@@ -32,9 +32,11 @@
     <Compile Include="Agent.js" />
     <Compile Include="Controller.js" />
     <Compile Include="bouncer.js" />
+    <Compile Include="IRCModule.js" />
     <Compile Include="ModuleController.js" />
-    <Compile Include="test.js" />
+    <Compile Include="test2.js" />
     <Compile Include="Bane.js" />
+    <Compile Include="ParrotModule.js" />
     <Compile Include="util\AgentLogger.js" />
     <Compile Include="util\config.js" />
     <Compile Include="util\Logger.js" />
@@ -48,6 +50,7 @@
     <Content Include="conf\server.json" />
     <Content Include="messages\info.json" />
     <Content Include="messages\IRCMessage.json" />
+    <Content Include="messages\parrot.json" />
     <Content Include="messages\module.json" />
     <Content Include="package.json" />
     <Content Include="README.md" />

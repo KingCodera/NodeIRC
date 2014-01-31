@@ -1,8 +1,16 @@
 ﻿var irc = require('irc');
 var colors = require('colors');
 var util = require('./util/util.js');
+var ModuleController = require('./ModuleController.js');
 
 module.exports = Agent;
+
+Agent.prototype.channels = [];
+Agent.prototype.currentChannels = [];
+Agent.prototype.operatorChannels = [];
+Agent.prototype.persistentChannels = [];
+Agent.prototype.activeChannels = [];
+Agent.prototype.util = util;
 
 Agent.isOperatorChannel = function(channel) {
     return channel.mode == "operator" ? true : false;
@@ -24,12 +32,32 @@ Agent.findChannel = function(channelName, channels) {
     }
 }
 
+Agent.prototype.checkChannel = function(channel) {
+    var unique = true;
+    for (var i in this.config.channels) {        
+        if (this.config.channels[i].name == channel) {
+            // Bot already knows it's in this channel.            
+            unique = false;
+            break;
+        }
+    }
+
+    if (unique) {
+        var configChannel = {};
+        configChannel.name = channel;
+        configChannel.mode = "persistent";
+        configChannel.modules = [];
+        this.config.channels.push(configChannel);
+        this.configFunc(this);
+        this.currentChannels.push(channel);
+    }
+}
+
 Agent.joinChannels = function(agent) {
     for (var i in agent.config.channels) {
         var channel = agent.config.channels[i];
-        agent.client.join(channel.name, function() {
-            agent.logger.info("[" + i + "]" + "Join channel: " + channel.name.magenta);
-        });
+        agent.client.join(channel.name);
+        agent.logger.info("[" + i + "]" + "Join channel: " + channel.name.magenta);
 
         agent.currentChannels.push(channel.name);
 
@@ -43,26 +71,29 @@ Agent.joinChannels = function(agent) {
 }
 
 function Agent(config, closeFunc, configFunc, consoleLogLevel) {        
-    this.channels = [];
-    this.currentChannels = [];
-    this.operatorChannels = [];
-    this.persistentChannels = [];
-    this.activeChannels = [];
-    this.util = util;
     this.config = config;    
-    this.closeFunc = closeFunc;
-    this.configFunc = configFunc;    
-
     this.logger = new util.Logger(config.nick.blue, consoleLogLevel);        
     this.agentLogger = new util.AgentLogger(this);   
+
+    this.moduleController = new ModuleController(this);
+    this.closeFunc = closeFunc;
+    this.configFunc = configFunc;       
 
     // Fucking pointer to self.
     var agent = this;  
 
     try {
+        if (config.BNC == undefined) {
+            config.BNC = false;
+        }
         client = new irc.Client(config.server, config.nick, {
             port: config.port,
-            userName: config.name
+            nick: config.nick,
+            userName: config.name,
+            password: config.pass,
+            sasl: config.BNC,
+            floodProtection: true,
+            floodProtectionDelay: 500
         });        
     } catch (err) {
         agent.logger.error("Error while connecting: " + err);
@@ -75,38 +106,22 @@ function Agent(config, closeFunc, configFunc, consoleLogLevel) {
     client.addListener("registered", function(message) {        
         client.connected = true;
     });
+        
+    agent.closeError = false;
 
-    this.IIID = setInterval(function() {
-        checkIdentified(agent);
-    }, 2000);
+    client.conn.addListener("close", function() {
+        agent.logger.error("Disconnected (Close)");        
+        agent.closeError = true;
+        agent.client.conn.end();        
+    });
 
-    function checkIdentified(agent) {
-        if (agent.client.identified) {
-            clearInterval(agent.IIID);
-            agent.logger.info("Joining channels");
-            Agent.joinChannels(agent);
-        } else if (!agent.client.passwordOk) {
-            agent.logger.warning("Password incorrect");
-            clearInterval(agent.IIID);
-            if (agent.config.allowUnidentified) {
-                Agent.joinChannels(agent);
-            } else {
-                agent.logger.error("Configuration does not allow unidentified nicks");
-                agent.client.disconnect();
-                agent.closeFunc(agent, false);
-            }
-        } else {
-            agent.logger.info("Attempting to identify");
-            try {
-                agent.client.say("nickserv", "IDENTIFY " + agent.config.pass);
-            } catch (err) {
-                clearInterval(agent.IIID);
-                agent.logger.error("Error while identifying");
-                agent.client.disconnect();
-                agent.closeFunc(agent, false);                
-            }
+    client.conn.addListener("end", function() {
+        if (!agent.closeError) {
+            agent.logger.error("Disconnected (End)");
         }
-    }
+        agent.client.disconnect();
+        agent.closeFunc(agent, true);
+    });
 
     client.addListener("raw", function(message) {
         if (message.rawCommand == "MODE" && message.args[0] == agent.config.nick && message.args[1] == "+r") {
@@ -118,14 +133,9 @@ function Agent(config, closeFunc, configFunc, consoleLogLevel) {
             agent.client.passwordOk = false;
         }
         
-        /*
-        if (message.nick == "NickServ" && message.rawCommand == "NOTICE") {
-            agent.logger.info("prefix: " + message.prefix);            
-            for (var i in message.args) {
-                agent.logger.info("args: " + message.args[i]);
-            }        
-        } 
-        */       
+        if (message.rawCommand == "324") {            
+            agent.checkChannel(message.args[1]);            
+        }
     });
 
     this.intervalID = setInterval(function() {
@@ -140,7 +150,8 @@ function Agent(config, closeFunc, configFunc, consoleLogLevel) {
         if (client.connected) {
             clearInterval(agent.intervalID);
             clearTimeout(agent.timerID);
-            agent.logger.info("connected to: " + agent.config.server.yellow);            
+            agent.logger.info("connected to: " + agent.config.server.yellow);
+            Agent.joinChannels(agent);            
         }
     }
 
@@ -151,11 +162,17 @@ function Agent(config, closeFunc, configFunc, consoleLogLevel) {
         closeFunc(agent, false);
     }
 
-    this.heartBeatID = setTimeout(heartBeat, 250000);;
+    this.pingerID = setInterval(pingBeat, 5000);        
+
+    function pingBeat() {
+        agent.client.send("PING", agent.config.server);        
+    }
+
+    this.heartBeatID = setTimeout(heartBeat, 250000);
 
     client.addListener("ping", function(origin) {
-        agent.logger.info("Replied to " + "CTCP PING".red + " command from: " + origin.red);
-        agent.agentLogger.info("Replied to " + irc.colors.wrap("light_red","CTCP PING") + " command from: " + irc.colors.wrap("light_cyan", origin));
+        agent.logger.info("Replied to " + "CTCP PING".red + " command from: " + origin.yellow);
+        agent.agentLogger.info("Replied to " + irc.colors.wrap("light_red","CTCP PING") + " command from: " + irc.colors.wrap("yellow", origin));
 
         // If no response after 250 seconds, restart.
         clearTimeout(agent.heartBeatID);
@@ -163,8 +180,8 @@ function Agent(config, closeFunc, configFunc, consoleLogLevel) {
     });
 
     function heartBeat() {
-        agent.logger.error("Lost connection to server: " + agent.config.server.grey);
-        agent.closeFunc(agent, true);
+        agent.logger.warning("No PING request from: " + agent.config.server.yellow);
+        heartBeatID = setTimeout(heartBeat, 250000);        
     }
     
     client.addListener("message", function(nick, origin, text, message) {
@@ -172,15 +189,16 @@ function Agent(config, closeFunc, configFunc, consoleLogLevel) {
         var to = origin.toLowerCase();
         // Check if a command is sent        
         if (text[0] == commandChar) {
-            var textArray = text.toLowerCase().split(" ");
+            var textArray = text.split(" ");
             // Strip command char from actual command.
-            var command = textArray[0].substr(1);
+            var command = textArray[0].substr(1).toLowerCase();
             switch (command) {
                 case "log": Agent.commandLog(agent, to, nick, textArray[1]); break;
                 case "disconnect": Agent.commandDisconnect(agent, to, nick); break;
                 case "channels": Agent.commandChannels(agent, to); break;
                 case "operator": Agent.commandChangeOperator(agent, to, nick, textArray[1], textArray.slice(2,textArray.length)); break;
                 case "restart": Agent.commandRestart(agent, to, nick); break;
+                case "modules": Agent.listModules(agent, to, nick); break;                
                 default: break;
             }
         }
@@ -207,9 +225,59 @@ function Agent(config, closeFunc, configFunc, consoleLogLevel) {
     client.addListener("error", function(message) {
         agent.logger.error("IRC Error: " + message.command);
         agent.agentLogger.error("Server error command: " + message.command);
-    });
+    });   
     
     delete agent;   
+}
+
+Agent.listModules = function(agent, to, nick) {
+    var modules = agent.moduleController.modules;
+    var moduleNames = [];
+
+    for (var i in modules) {
+        moduleNames.push(modules[i].name);
+    }
+    if (moduleNames.length == 0) {
+        agent.client.say(to, "No modules available.");
+    } else {
+        agent.client.say(to, "Available modules: [" + agent.util.arrayToString(moduleNames, "light_blue", "irc") + "]");
+    }
+}
+
+Agent.prototype.addModule = function(module) {
+    var channels = module.channels;
+
+    for (var i in channels) {
+        var channel = channels[i];
+        var confChannel;
+        if (this.currentChannels.indexOf(channel) == -1) {            
+            this.client.join(channel);
+            this.logger.info("Joined channel: " + channel.magenta);
+            this.currentChannels.push(channel);
+                        
+            confChannel.name = channel;
+            confChannel.mode = "active";
+            confChannel.modules = [module.name];
+
+            this.channels.push(confChannel);
+            this.configFunc(this);
+            this.logger.info("Added new channel and module.");
+        } else {
+            for (var j in this.channels) {
+                if (this.channels[j].name == channel) {
+                    if (this.channels[j].modules.indexOf(module.name) == -1) {
+                        this.channels[j].modules.push(module.name);
+                        this.configFunc(this);                     
+                        this.logger.info("Added new module to channel: " + channel.magenta);   
+                    }
+                }
+            }
+        }
+    }
+}
+
+Agent.prototype.deleteModule = function(module) {
+    module.killListeners();
 }
 
 Agent.commandLog = function(agent, to, nick, argument) {
@@ -263,17 +331,35 @@ Agent.checkProtectedOperator = function(agent, nick) {
 }
 
 Agent.commandChangeOperator = function(agent, to, requester, command, nicks) {       
+    if (command != undefined) {
+        command = command.toLowerCase();
+    } else {
+        agent.client.say(to, "No argument specified, use either add, del or list");
+        return;
+    }
+
+    if ((command == "add" || command == "del") && nicks.length == 0) {
+        agent.client.say("Specify at least one nickname");
+        return;
+    }
+
     // @TODO: Check if nickname is registered.    
     if (Agent.checkOperator(agent, requester)) {
         switch (command) {
             case "add": Agent.commandAddOperator(agent, to, requester, nicks); break;
             case "del": Agent.commandDelOperator(agent, to, requester, nicks); break;
-            default: break;
+            case "list": Agent.commandListOperator(agent, to, requester); break;
+            default: agent.client.say("Unknown command."); break;
         } 
     } else {
-        client.agentLogger.warning("Unauthorized attempt to change operator by: " + irc.colors.wrap("light_cyan", requester));
-        client.logger.warning("Unauthorized attempt to change operator by: " + requester.cyan);
+        agent.agentLogger.warning("Unauthorized attempt to change operator by: " + irc.colors.wrap("light_cyan", requester));
+        agent.logger.warning("Unauthorized attempt to change operator by: " + requester.cyan);
     }
+}
+
+Agent.commandListOperator = function(agent, to, requester) {
+    var operators = agent.config.pOperators.concat(agent.config.operators);
+    agent.client.say(to, "Bot operators are: [" + agent.util.arrayToString(operators, "light_cyan", "irc") + "]");
 }
 
 Agent.commandAddOperator = function(agent, to, requester, nicks) {
@@ -292,7 +378,7 @@ Agent.commandAddOperator = function(agent, to, requester, nicks) {
 
     if (addedOperators.length > 0) {
         var string = agent.util.arrayToLowerCase(addedOperators);
-        agent.logger.info("Added: [" + agent.util.arrayToString(addedOperators, "cyan", "console") + "] to Operators list by: " + requester.cyan);
+        agent.logger.info("Added: [" + agent.util.arrayToString(addedOperators, colors.cyan, "console") + "] to Operators list by: " + requester.cyan);
         agent.client.say(to, "Added: [" + agent.util.arrayToString(addedOperators, "light_cyan", "irc") + "] to Operators list");
     }
 
@@ -311,19 +397,18 @@ Agent.commandDelOperator = function(agent, to, requester, nicks) {
             removedOperators.push(nick);
             bChanged = true;
         } else {
-            agent.protectedOperators.push(nick);
+            protectedOperators.push(nick);
         }
     }
 
     if (removedOperators.length > 0) {        
-        agent.logger.info("Removed: [" + agent.util.arrayToString(removedOperators, "cyan", "console") + "] from Operators list by: " + requester.cyan);
+        agent.logger.info("Removed: [" + agent.util.arrayToString(removedOperators, colors.cyan, "console") + "] from Operators list by: " + requester.cyan);
         agent.client.say(to, "Removed: [" + agent.util.arrayToString(removedOperators, "light_cyan", "irc") + "] from Operators list");
     }
 
-    if (protectedOperators.length > 0) {
-        var string = util.arrayToLowerCase(protectedOperators);        
+    if (protectedOperators.length > 0) {        
         agent.logger.warning("Attempt to remove protected operators by: " + requester.cyan);
-        agent.client.say(to, "These Operators are protected: [" + agent.util.arrayToString(string, "light_cyan", "irc") + "] and cannot be removed");
+        agent.client.say(to, "These Operators are protected: [" + agent.util.arrayToString(protectedOperators, "light_cyan", "irc") + "] and cannot be removed");
     }
 
     if (bChanged) { agent.configFunc(agent); }
@@ -340,8 +425,7 @@ Agent.commandDisconnect = function(agent, to, nick) {
         agent.logger.warning("Disconnect attempt by unauthorized person: " + nick.cyan);
     }
     agent.logger.warning("Removing listeners");
-    var emitter = agent.client.removeAllListeners();
-    agent.logger.info(emitter);
+    agent.client.removeAllListeners();    
 }
 
 Agent.commandChannels = function(agent, to) {            
@@ -358,18 +442,15 @@ Agent.commandChannels = function(agent, to) {
 Agent.commandRestart = function(agent, to, nick) {
     clearInterval(agent.intervalID);
     clearTimeout(agent.timerID);
-    clearTimeout(agent.heartBeatID);
-    agent.client.removeAllListeners(['ctcp']);
+    clearTimeout(agent.heartBeatID);    
 
     if (Agent.checkProtectedOperator(agent, nick)) { 
         agent.agentLogger.logChange("Restarting...");        
-        agent.client.disconnect("Restart request by Operator: " + nick.cyan, function() {
+        agent.client.disconnect("Restart request by Operator: " + nick, function() {
             setTimeout(function() { agent.closeFunc(agent, true); }, 2000 );
         });        
     } else {
         agent.client.say(to, agent.util.arrayToString([nick], "light_cyan", "irc") + " you are not a bot Super Operator");
         agent.logger.warning("Restart attempt by unauthorized person: " + nick.cyan);
-    }
-
-    
+    }    
 }

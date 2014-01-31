@@ -28,7 +28,7 @@ function arrayToString(array, color, type) {
         tmpString = array[i];
 
         switch (type) {
-            case "console": tmpString = tmpString.color; break;
+            case "console": tmpString = color(tmpString); break;
             case "irc": tmpString = irc.colors.wrap(color, tmpString); break;
             default: break;
         }
