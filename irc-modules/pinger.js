@@ -6,8 +6,11 @@ var client = require('../ModuleClient').createClient(
     ['#doki-development', '#project-precure']
 );
 
-client.on('!ping', function(message) {
+var handler = function(message) {
     this.sendText(message.to, 'pong');
-});
+};
+
+client.on('ping', handler);
+client.on('!ping', handler);
 
 client.connect(20000);
