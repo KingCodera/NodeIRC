@@ -3,8 +3,8 @@ Components:
 Controller - Run via "node Controller.js"
 - This program handles all module connections and the connection to the IRC server, either direct or BNC.
 
-testClient - Run via "node testClient.js"
-- Obviously needs a rename! At the moment this client handles all translation requests using the wwwjdic API.
+wwwjdic - Run via "node wwwjdicClient.js"
+- This client handles all translation requests using the wwwjdic API.
 
 Messages folder hosts template files for creating messages between Controller and Modules.
 - IRCMessage.json is a data structure that is used to transfer IRC message data.
