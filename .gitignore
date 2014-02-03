@@ -1,0 +1,19 @@
+lib-cov
+*.seed
+*.log
+*.csv
+*.dat
+*.out
+*.pid
+*.gz
+
+pids
+logs
+results
+
+npm-debug.log
+node_modules
+
+#ignore config files in conf. Ensures someone
+#doesn't accidentally push his real config.
+conf/*.json
