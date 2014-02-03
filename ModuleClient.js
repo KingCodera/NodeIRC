@@ -6,7 +6,7 @@ var lodash = require('lodash');
 var util = require('./util/util.js');
 var IRCMessageBase = require('./messages/IRCMessage.json');
 
-function moduleClient(name, code, channels) {
+function moduleClient(name, code, channels, options) {
     /*jshint validthis:true */
 
     this.name = name;
@@ -16,6 +16,7 @@ function moduleClient(name, code, channels) {
     this.client = null;
     this.connected = false;
     this.inQueue = 0;
+    this.time = options.time || 100;
     this.emitter = new events.EventEmitter();
 
     this.on = function(command, callback) {
@@ -55,10 +56,7 @@ function moduleClient(name, code, channels) {
             'serviceType': [
                 'channel'
             ],
-            'channels': [
-                '#doki-development',
-                '#project-precure'
-            ],
+            'channels': this.channels,
             'commands': this.commands
         }));
     };
@@ -92,7 +90,7 @@ function moduleClient(name, code, channels) {
         setTimeout(function() {
             this.client.write(JSON.stringify(message));
             this.inQueue--;
-        }.bind(this), this.inQueue * 100);
+        }.bind(this), this.inQueue * this.time);
     };
 
     this.disconnected = function() {
@@ -100,6 +98,6 @@ function moduleClient(name, code, channels) {
     };
 }
 
-exports.createClient = function(name, code, channels) {
-    return new moduleClient(name, code, channels);
+exports.createClient = function(name, code, channels, options) {
+    return new moduleClient(name, code, channels, options || {});
 };
