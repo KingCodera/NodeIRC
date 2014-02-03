@@ -41,7 +41,7 @@
     <Compile Include="util\config.js" />
     <Compile Include="util\Logger.js" />
     <Compile Include="Server.js" />
-    <Compile Include="testClient.js" />
+    <Compile Include="wwwjdicClient.js" />
     <Compile Include="util\util.js" />
     <Content Include="conf\botsBackup.json" />
     <Content Include="conf\bots.json" />
