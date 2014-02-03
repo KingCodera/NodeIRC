@@ -18,6 +18,6 @@
     "util": "~0.10.2",
     "n": "~1.1.0",
     "lodash": "~2.4.1",
-    "commander": "~2.1.0"
+    "commander": "git://github.com/TheThing/commander.js.git"
   }
 }
