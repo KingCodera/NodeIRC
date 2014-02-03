@@ -168,20 +168,20 @@ function Agent(config, closeFunc, configFunc, consoleLogLevel) {
         agent.client.send("PING", agent.config.server);        
     }
 
-    this.heartBeatID = setTimeout(heartBeat, 250000);
+    this.heartBeatID = setTimeout(heartBeat, 300000);
 
     client.addListener("ping", function(origin) {
         agent.logger.info("Replied to " + "CTCP PING".red + " command from: " + origin.yellow);
         agent.agentLogger.info("Replied to " + irc.colors.wrap("light_red","CTCP PING") + " command from: " + irc.colors.wrap("yellow", origin));
 
-        // If no response after 250 seconds, restart.
+        // If no response after 300 seconds, restart.
         clearTimeout(agent.heartBeatID);
-        heartBeatID = setTimeout(heartBeat, 250000);
+        agent.heartBeatID = setTimeout(heartBeat, 300000);
     });
 
     function heartBeat() {
         agent.logger.warning("No PING request from: " + agent.config.server.yellow);
-        heartBeatID = setTimeout(heartBeat, 250000);        
+        agent.heartBeatID = setTimeout(heartBeat, 300000);        
     }
     
     client.addListener("message", function(nick, origin, text, message) {
