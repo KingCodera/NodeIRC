@@ -92,6 +92,7 @@ function Agent(config, closeFunc, configFunc, consoleLogLevel) {
 
     // Fucking pointer to self.
     var agent = this;
+    var client = null;
 
     try {
         if (config.BNC === undefined) {
@@ -108,13 +109,14 @@ function Agent(config, closeFunc, configFunc, consoleLogLevel) {
         });
     } catch (err) {
         agent.logger.error('Error while connecting: ' + err);
+        return;
     }
     
     this.client = client;
     client.connected = false;
     client.passwordOk = true;
 
-    client.addListener('registered', function(message) {
+    client.addListener('registered', function() {
         client.connected = true;
     });
         
@@ -195,7 +197,7 @@ function Agent(config, closeFunc, configFunc, consoleLogLevel) {
         agent.heartBeatID = setTimeout(heartBeat, 300000);
     }
     
-    client.addListener('message', function(nick, origin, text, message) {
+    client.addListener('message', function(nick, origin, text) {
         var commandChar = agent.config.commandChar;
         var to = origin.toLowerCase();
         // Check if a command is sent        
@@ -228,7 +230,7 @@ function Agent(config, closeFunc, configFunc, consoleLogLevel) {
         }
     });
 
-    client.addListener('ctcp', function(nick, to, text, type, message) {
+    client.addListener('ctcp', function(nick, to, text, type) {
         switch (text) {
             case 'TIME':
                 agent.logger.info('Replied to ' + 'CTCP TIME'.red + ' command from: ' + nick.cyan);
@@ -252,7 +254,7 @@ function Agent(config, closeFunc, configFunc, consoleLogLevel) {
     });
 }
 
-Agent.listModules = function(agent, to, nick) {
+Agent.listModules = function(agent, to) {
     var modules = agent.moduleController.modules;
     var moduleNames = [];
 
@@ -272,7 +274,7 @@ Agent.prototype.addModule = function(module) {
     var channels = module.channels;
 
     for (var i in channels) {
-        if (modules.hasOwnProperty(i)) {
+        if (channels.hasOwnProperty(i)) {
             var channel = channels[i];
             var confChannel;
             if (this.currentChannels.indexOf(channel) === -1) {
