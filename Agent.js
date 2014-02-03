@@ -194,7 +194,8 @@ function Agent(config, closeFunc, configFunc, consoleLogLevel) {
 
     function heartBeat() {
         agent.logger.warning('No PING request from: ' + agent.config.server.yellow);
-        agent.heartBeatID = setTimeout(heartBeat, 300000);
+        //No need to notify again if ping request failed.
+        //agent.heartBeatID = setTimeout(heartBeat, 300000);
     }
     
     client.addListener('message', function(nick, origin, text) {
