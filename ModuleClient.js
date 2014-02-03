@@ -89,7 +89,6 @@ function moduleClient(name, code, channels) {
 
     this.send = function(message) {
         this.inQueue++;
-        console.log(message);
         setTimeout(function() {
             this.client.write(JSON.stringify(message));
             this.inQueue--;
