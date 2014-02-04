@@ -13,6 +13,10 @@ results
 
 npm-debug.log
 node_modules
+share
+lib
+include
+bin
 
 #Ignore user specific config files
 conf/*.json
