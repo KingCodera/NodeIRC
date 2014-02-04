@@ -3,7 +3,7 @@
 var client = require('../ModuleClient').createClient(
     'Pinger Module',
     'pinger',
-    ['#doki-development', '#project-precure']
+    ['#doki-development', '#project-precure', '#doki-precure']
 );
 
 var handler = function(message) {
