@@ -420,12 +420,12 @@ Agent.commandDisconnect = function(agent, to, nick) {
         agent.logger.info("Disconnecting...");
         agent.client.disconnect("Disconnect request by Operator");
         agent.closeFunc(agent, false);
+		agent.logger.warning("Removing listeners");
+		agent.client.removeAllListeners();
     } else {
         agent.client.say(to, irc.colors.wrap("light_cyan", nick) + " you are not a bot Super Operator");
         agent.logger.warning("Disconnect attempt by unauthorized person: " + nick.cyan);
-    }
-    agent.logger.warning("Removing listeners");
-    agent.client.removeAllListeners();    
+	}        
 }
 
 Agent.commandChannels = function(agent, to) {            

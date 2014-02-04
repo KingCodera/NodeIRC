@@ -3,7 +3,7 @@
     "port": 6667,
     "botName": "[Rapier]",
     "userName": "Rapier",
-    "password": "odyssey",
+    "password": "password",
     "commandChar": "!",
     "logging": false
 }

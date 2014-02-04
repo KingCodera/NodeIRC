@@ -37,19 +37,16 @@
     <Compile Include="test2.js" />
     <Compile Include="Bane.js" />
     <Compile Include="ParrotModule.js" />
+    <Compile Include="RSSFeed.js" />
     <Compile Include="util\AgentLogger.js" />
     <Compile Include="util\config.js" />
     <Compile Include="util\Logger.js" />
     <Compile Include="Server.js" />
     <Compile Include="wwwjdicClient.js" />
     <Compile Include="util\util.js" />
-    <Content Include="conf\botsBackup.json" />
-    <Content Include="conf\bots.json" />
-    <Content Include="conf\channels.json" />
-    <Content Include="conf\entity.json" />
-    <Content Include="conf\server.json" />
     <Content Include="messages\info.json" />
     <Content Include="messages\IRCMessage.json" />
+    <Content Include="messages\RSSFeed.json" />
     <Content Include="messages\parrot.json" />
     <Content Include="messages\module.json" />
     <Content Include="package.json" />
@@ -59,6 +56,7 @@
     <Folder Include="conf\" />
     <Folder Include="messages\" />
     <Folder Include="modules\" />
+    <Folder Include="test\" />
     <Folder Include="util\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsTools.targets" />
