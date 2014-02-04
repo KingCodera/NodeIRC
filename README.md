@@ -22,3 +22,8 @@ The config is stored in ./conf. This includes any configuration to both the modu
 * Other files are obsolete.
 
 To use, simply rename bots.json.example to bots.json and apply your real connection info.
+
+License
+-------
+
+WTFPL - http://sam.zoy.org/wtfpl/COPYING

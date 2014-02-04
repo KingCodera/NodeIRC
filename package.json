@@ -2,7 +2,7 @@
   "name": "NodeIRC",
   "version": "0.2.0",
   "description": "NodeIRC",
-  "main": "bouncer.js",
+  "main": "index.js",
   "author": {
     "name": "Orillion",
     "email": "Orillion.Lightning@gmail.com"
@@ -19,5 +19,6 @@
     "n": "~1.1.0",
     "lodash": "~2.4.1",
     "commander": "git://github.com/TheThing/commander.js.git"
-  }
+  },
+  "license": "WTFPL"
 }
