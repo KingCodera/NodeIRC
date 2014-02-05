@@ -1,0 +1,17 @@
+﻿{
+	"type": "module", 
+	"moduleName": "WWWJDIC Translator",
+	"moduleCode": "WJT",
+	"botName": "Severin",
+	"hashKey": "test",
+	"serviceType": [
+		"channel"
+	],
+	"channels": [
+		"#doki-development",
+		"#doki-nihongo",
+		"#project-precure",
+		"#doki"
+	],
+	"commands": ["!t", "!dict", "!unload"]
+}
