@@ -1,42 +1,22 @@
 {
     "server": "RizonBNC.eu.rizon.net",
     "port": 1234,
-    "nick": "Severin",
-    "name": "Severin",
-    "pass": "Severin:password",
+    "hashKey": "",
+    "nick": "mybot",
+    "userName": "myircusername",
+    "password": "myircpassword",
     "BNC": true,
     "allowUnidentified": false,
     "logLevel": "info",
     "commandChar": "!",
     "operators": [],
     "pOperators": [
-        "Orillion"
+        "me"
     ],
     "channels": [
         {
-            "name": "#doki-development",
-            "mode": "operator",
-            "modules": []
-        },
-        {
-            "name": "#project-precure",
-            "mode": "persistent",
-            "modules": []
-        },
-        {
-            "name": "#doki-dev-2",
-            "mode": "persistent",
-            "modules": []
-        },
-        {
-            "name": "#doki-nihongo",
-            "mode": "persistent",
-            "modules": []
-        },
-        {
-            "name": "#doki",
-            "mode": "persistent",
-            "modules": []
+            "name": "#my-channel",
+            "mode": "persistent"
         }
     ],
     "modulePort": 20000
