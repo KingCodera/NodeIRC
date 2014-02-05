@@ -6,6 +6,7 @@ lib-cov
 *.out
 *.pid
 *.gz
+*.njsproj
 
 pids
 logs
@@ -16,6 +17,7 @@ node_modules
 share
 include
 bin
+
 
 #Ignore user specific config files
 conf/*.json
