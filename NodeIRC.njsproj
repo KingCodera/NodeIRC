@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <SchemaVersion>2.0</SchemaVersion>
+        <ProjectGuid>{2832f11a-50ad-40d6-85a1-f01ee548386a}</ProjectGuid>
+        <ProjectHome />
+        <ProjectView>ShowAllFiles</ProjectView>
+        <StartupFile>index.js</StartupFile>
+        <WorkingDirectory>.</WorkingDirectory>
+        <OutputPath>.</OutputPath>
+        <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8};{349c5851-65df-11da-9384-00065b846f21};{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}</ProjectTypeGuids>
+        <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+        <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
+    <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
+    <ItemGroup>
+        <Content Include="package.json" />
+        <Content Include="README.md" />
+        <Compile Include="index.js" />
+        <Compile Include="irc-modules\precure.js" />
+        <Compile Include="irc-modules\wwwjdicClient.js" />
+        <Compile Include="irc-modules\test.js" />
+        <Compile Include="irc-modules\ParrotModule.js" />
+        <Compile Include="irc-modules\Bane.js" />
+        <Compile Include="irc-modules\pinger.js" />
+        <Compile Include="irc-modules\test2.js" />
+        <Compile Include="script\server.js" />
+        <Content Include="lib\messages\parrot.json" />
+        <Content Include="lib\messages\IRCMessage.json" />
+        <Content Include="lib\messages\info.json" />
+        <Content Include="lib\messages\module.json" />
+        <Compile Include="lib\util\Logger.js" />
+        <Compile Include="lib\util\util.js" />
+        <Compile Include="lib\util\AgentLogger.js" />
+        <Compile Include="lib\util\config.js" />
+        <Compile Include="lib\server\module.js" />
+        <Compile Include="lib\server\agent.js" />
+        <Compile Include="lib\server\controller.js" />
+        <Compile Include="lib\server\index.js" />
+        <Compile Include="lib\client\index.js" />
+    </ItemGroup>
+    <ItemGroup>
+        <Folder Include="irc-modules" />
+        <Folder Include="lib\client" />
+        <Folder Include="lib\messages" />
+        <Folder Include="lib\server" />
+        <Folder Include="lib\util" />
+        <Folder Include="script" />
+    </ItemGroup>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+    <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsTools.targets" />
+    <ProjectExtensions>
+        <VisualStudio>
+          <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+            <WebProjectProperties>
+              <UseIIS>False</UseIIS>
+              <AutoAssignPort>True</AutoAssignPort>
+              <DevelopmentServerPort>0</DevelopmentServerPort>
+              <DevelopmentServerVPath>/</DevelopmentServerVPath>
+              <IISUrl>http://localhost:48022/</IISUrl>
+              <NTLMAuthentication>False</NTLMAuthentication>
+              <UseCustomServer>True</UseCustomServer>
+              <CustomServerUrl>http://localhost:1337</CustomServerUrl>
+              <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+            </WebProjectProperties>
+          </FlavorProperties>
+          <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}" User="">
+            <WebProjectProperties>
+              <StartPageUrl>
+              </StartPageUrl>
+              <StartAction>CurrentPage</StartAction>
+              <AspNetDebugging>True</AspNetDebugging>
+              <SilverlightDebugging>False</SilverlightDebugging>
+              <NativeDebugging>False</NativeDebugging>
+              <SQLDebugging>False</SQLDebugging>
+              <ExternalProgram>
+              </ExternalProgram>
+              <StartExternalURL>
+              </StartExternalURL>
+              <StartCmdLineArguments>
+              </StartCmdLineArguments>
+              <StartWorkingDirectory>
+              </StartWorkingDirectory>
+              <EnableENC>False</EnableENC>
+              <AlwaysStartWebServerOnDebug>False</AlwaysStartWebServerOnDebug>
+            </WebProjectProperties>
+          </FlavorProperties>
+        </VisualStudio>
+    </ProjectExtensions>
+</Project>
