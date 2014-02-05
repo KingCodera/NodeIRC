@@ -1,10 +1,6 @@
 'use strict';
 
-var client = require('../ModuleClient').createClient(
-    'Pinger Module',
-    'pinger',
-    ['#doki-development', '#project-precure', '#doki-precure']
-);
+var client = require('../index').createClient('Pinger Module', 'pinger');
 
 var handler = function(message) {
     this.sendText(message.to, 'pong');

@@ -3,8 +3,7 @@
 var client = require('../index').createClient(
     'Precure Module',
     'precure',
-    ['#doki-development', '#project-precure', '#nfp-staff'],
-    {time: 4000}
+    {time: 4000, hashKey: 'asdf', persistent: true}
 );
 
 function random(min, max) {
