@@ -7,6 +7,8 @@ lib-cov
 *.pid
 *.gz
 *.njsproj
+*.v11.suo
+*.sln
 
 pids
 logs
