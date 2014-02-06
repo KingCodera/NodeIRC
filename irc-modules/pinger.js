@@ -1,6 +1,7 @@
 'use strict';
 
-var client = require('../index').createClient(
+var irc = require('../index')
+var client = irc.createClient(
 	'Pinger Module',
 	'pinger',
 	{time: 100, persistent: true}
