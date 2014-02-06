@@ -3,7 +3,7 @@
 var client = require('../index').createClient(
 	'Pinger Module',
 	'pinger',
-	{time: 100, hashKey: 'asdf', persistent: true, channels: ['#doki-development']}
+	{time: 100, persistent: true}
 );
 
 var handler = function(message) {
