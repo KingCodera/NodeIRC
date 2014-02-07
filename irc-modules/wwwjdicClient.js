@@ -1,9 +1,15 @@
-﻿var net = require('net');
-var colors = require('colors');
+﻿'use strict';
+
+var irc = require('../index');
 var http = require('http');
-var lodash = require('lodash');
-var irc = require('irc');
-var IRCMessageBase = require('./messages/IRCMessage.json');
+var _ = require('lodash');
+
+var client = irc.createClient(
+	'WWWJDIC Translator',
+	'WJD',
+	{time: 100, persistent: true}
+);
+
 var Command = require('commander');
 
 var httpOptions = {
@@ -11,10 +17,6 @@ var httpOptions = {
 }
 
 var path = "/~jwb/cgi-bin/wwwjdic.cgi?";
-var timer = 0;
-var util = require('./util/util.js');
-var module = require('./messages/module.json');
-var logger;
 
 var dicts = {
     "1": "Japenese - English",
@@ -39,43 +41,26 @@ Command.on('help', function() {
 });
 
 Command.on('error', function() {
-    logger.error("Random error");
+    this.logger.error("Random error");
 });
 
 Command.help = false;
 Command.dict = 1;
 Command.limit = 1;
 
-sendToClient = function sendToClient(to, text) {
-    if (text.charAt(0) == " ") {
-        return;
-    }
-    timer += 100;
-    var IRCMessage = lodash.defaults({
-        to: to,
-        text: text
-    } ,IRCMessageBase);    
-    setTimeout(function() { 
-        client.write(JSON.stringify(IRCMessage));
-        timer -= 100;
-    }, timer);
-}
-
-requestWWWJDICJPWord = function(message, dict, options, arg) {
+function requestWWWJDICJPWord(message, dict, options, arg) {
     var type = "U";
     var key = options.common ? "P" : "J";
     var exPath = path + options.dict + "Z" + type + key + arg;
     httpOptions.path = exPath;
-
-    logger.info(httpOptions.path);
-
+    
     var callback = function(response) {
-        var data = "";
+        var httpdata = "";
         response.on('data', function(chunk) {
-            data = data + chunk;
+            httpdata = httpdata + chunk;
         });
         response.on('end', function() {            
-            var string = data.toString();
+            var string = httpdata.toString();
             string = string.replace(/<([^>]*)>/g, '');
             string = string.split(/\n/);
 
@@ -90,26 +75,27 @@ requestWWWJDICJPWord = function(message, dict, options, arg) {
 
             var end = lines.length > options.limit ? options.limit : lines.length;
             var to = options.limit > 3 ? message.nick : message.to;
+            var data = [];
 
             for (var i = 0; i < end; i++) {
                 var text = formatWord(lines[i]);
 				var textend = text.length > 4 ? 4 : text.length
 				for (var j = 0; j < textend; j++) {
-					sendToClient(to, text[j]);
+					client.sendText(message.to, text[j]);
 				}
 				if (text.length > 4) {
-					sendToClient(to, "Displaying 3/" + text.length + " results");
+					client.sendText(message.to, "Displaying 3/" + text.length + " results");
 				}
             }
         });
     }   
 
     http.get(httpOptions, callback).on('error', function(e) {
-        logger.warning("Get error: " + e.message);
+        this.logger.warning("Get error: " + e.message);
     });
 }
 
-formatWord = function(word) {
+function formatWord(word) {
 	word = word.replace(/\/\(P\)/g, " (P)");	
 	var array = word.split(/(?=[^A-z])\/(?=[^A-z]|$)/);	
 	var definitions = [];
@@ -127,7 +113,7 @@ formatWord = function(word) {
 				def = def.replace(/\//g, ", " );
 				var index = parseInt(i) + 1;				
 				if (common) {
-					index = irc.colors.wrap("light_green", "#" + index);
+					index = '\x0309#' + index + '\x0F';
 				} else {
 					index = "#" + index;
 				}
@@ -140,7 +126,7 @@ formatWord = function(word) {
 	return definitions;
 }
 
-requestWWWJDICKanji = function(to, dict, options, arg) {
+function requestWWWJDICKanji(to, dict, options, arg) {
     var type = "M";
     var key = "J";
     var exPath = path + dict + "Z" + type + key + arg;
@@ -163,10 +149,8 @@ requestWWWJDICKanji = function(to, dict, options, arg) {
                 var str = string[i];            
                 switch(true) {
                     case /F[0-9]+/.test(str): 
-                        if (str.charAt(0) == "F") {
-                            console.log(str); 
-                            level = str.substring(1, str.length);     
-                            console.log(level);                        
+                        if (str.charAt(0) == "F") {                             
+                            level = str.substring(1, str.length);                                                     
                         }
                         break;
                     case /[\u30a0-\u30ff]+/.test(str): onyomi.push(str); break;
@@ -184,9 +168,9 @@ requestWWWJDICKanji = function(to, dict, options, arg) {
             var kanjiText = arg;
 
             if (level > 2500) {
-                kanjiText = irc.colors.wrap("light_red", kanjiText);
+                kanjiText = '\x0304' + kanjiText + '\x0F';
             } else {
-                kanjiText = irc.colors.wrap("light_green", kanjiText);
+                kanjiText = '\x0309' + kanjiText + '\x0F';
             }
 
             if (meanings.length == 0) {
@@ -195,53 +179,49 @@ requestWWWJDICKanji = function(to, dict, options, arg) {
 
             var yomiText = "[" + kanjiText + "] ";
             var send = false;
+            var data = [];
 
             if (onyomi.length > 0 && options.sound) {
-                yomiText += "On: [" + util.arrayToString(onyomi, "light_cyan", "irc") + "] ";
+                yomiText += "On: [\x0311" + onyomi.join(', ') + "\x0F] ";
                 var send = true;                                
             }
             if (kunyomi.length > 0 && options.sound) {
-                yomiText += "Kun: [" + util.arrayToString(kunyomi, "light_magenta", "irc") + "] ";                
+                yomiText += "Kun: [\x0313" + kunyomi.join(', ') + "\x0F] ";                
                 var send = true;                                
             }
             if (names.length > 0 && options.sound) {                
-                yomiText += "Names: [" + util.arrayToString(names, "orange", "irc") + "] ";                
+                yomiText += "Names: [\x0307" + names.join(', ') + "\x0F] ";                
                 var send = true;                                                
             }
 
             if (send) {
-                sendToClient(to, yomiText);
+                client.sendText(to, yomiText);
             }
 
             if (meanings.length > 0 && options.kanji) {                
                 var text = "[" + kanjiText + "] Meanings: " + meanings.join(", ");
-                sendToClient(to, text);     
-            }
+                client.sendText(to, text);
+            }            
         });
     }   
 
     http.get(httpOptions, callback).on('error', function(e) {
-        logger.warning("Get error: " + e.message);
+        this.logger.warning("Get error: " + e.message);
     });        
 }
 
-var client = net.connect(20000, function() {
-    logger = new util.Logger(module.moduleCode, "info");
-    logger.info("Module loaded");
-    client.write(JSON.stringify(module));
-});
-
-dict = function(nick, args) {
-    for (var key in dicts) {
-        var IRCMessage = require('./messages/IRCMessage.json');
-        IRCMessage.to = nick;
-        IRCMessage.text = key + ": " + dicts[key];
-        client.write(JSON.stringify(IRCMessage));
+function dict(message) {                
+    for (var key in dicts) {        
+        var text = key + ": " + dicts[key];
+        client.sendText(message.nick, text);
     }
 }
 
-translate = function(message, args) {
-    logger.info("origin: " + message.to);
+function translate(message) {
+    var textArray = message.text.split(" ");   
+    var args = textArray.slice(1,textArray.length);
+    
+    this.logger.info("origin: " + message.to);    
     
     // Replace Japanese space with normal space!    
     args = args.join(" ").replace(/　/g, " ").split(" ");
@@ -263,7 +243,7 @@ translate = function(message, args) {
         args: Command.args
     }   
 
-    logger.info("Help: " + options.help);
+    this.logger.info("Help: " + options.help);
 
     Command.sound = false;
     Command.romaji = false;
@@ -280,33 +260,37 @@ translate = function(message, args) {
     options.dict = parseInt(options.dict) || 1;
 
     if (options.dict > 2 || options.dict < 1) {
-        sendToClient(message.to, "Invalid dictionary, defaulting to dict 1");
+        this.sendText(message.to, "Invalid dictionary, defaulting to dict 1");
         options.dict = 1;
     }
     
-    selectQuery(message, options);       
+    var data = selectQuery(message, options);       
+
+    for (var i in data) {
+        this.sendText(message.to, data[i]);
+    }
 }
 
-sendHelp = function(nick) {
-    sendToClient(nick, "Usage: !t [options] searchterm");
-    sendToClient(nick, "[options]");
-    sendToClient(nick, "-h, --help, Displays this help");
-    sendToClient(nick, "-s, --sound, Show readings for word/kanji");
-    //sendToClient(nick, "-r, --romaji, Displays this help");
-    sendToClient(nick, "-d, --dict <value>, Seach in specified dictionary");
-    sendToClient(nick, "-c, --common, Search common words only");
-    //sendToClient(nick, "-e, --example [value], Show [value] example sentences");
-    sendToClient(nick, "-k, --kanji, Search each kanji individually");
-    sendToClient(nick, "-l, --limit [value], Show [value] results");
-    //sendToClient(nick, "-E, --exact, Match results exactly");
+function sendHelp(nick) {
+    client.sendText(nick, "Usage: !t [options] searchterm");
+    client.sendText(nick, "[options]");
+    client.sendText(nick, "-h, --help, Displays this help");
+    client.sendText(nick, "-s, --sound, Show readings for word/kanji");
+    //client.sendText(nick, "-r, --romaji, Displays this help");
+    client.sendText(nick, "-d, --dict <value>, Seach in specified dictionary");
+    client.sendText(nick, "-c, --common, Search common words only");
+    //this.sendText(nick, "-e, --example [value], Show [value] example sentences");
+    client.sendText(nick, "-k, --kanji, Search each kanji individually");
+    client.sendText(nick, "-l, --limit <value>, Show <value> results");
+    //this.sendText(nick, "-E, --exact, Match results exactly");
 }
 
-selectQuery = function(message, options) {
+function selectQuery(message, options) {
     var args = options.args;     
     if (options.help) {        
         sendHelp(message.nick);
     } else if (options.args.length == 1 && options.args[0].trim() == "") {
-        sendToClient(message.to, "Please specify a search term \"bro\"");
+        client.sendText(message.to, "Please specify a search term \"bro\"");
     } else if (options.kanji || options.sound) {
         args = args.join();
         var kanjiArgs = [];
@@ -316,23 +300,24 @@ selectQuery = function(message, options) {
                 kanjiArgs.push(args.charAt(i));
             }
         }
-
+        
         if (kanjiArgs.length > 4) {
-            sendToClient(message.to, "Too many kanji specified");
+            client.sendText(message.to, "Too many kanji specified");
             return;
-        }
+        }        
 
-        function callback(arg) {            
+        var kanjiCallback = function(arg) {            
             requestWWWJDICKanji(message.to, 1, options, arg);
-        }
-
-        kanjiArgs.forEach(callback);        
+        }        
+        kanjiArgs.forEach(kanjiCallback);        
     } else {
-        requestWWWJDICJPWord(message, 1, options, args[0]);
+        return requestWWWJDICJPWord(message, 1, options, args[0]);
     }
 }
 
-isKanji = function(arg) {
+
+
+function isKanji(arg) {
     switch(true) {
         case /[\u4e00-\u9faf]/.test(arg): return true;
         case /[\u3400-\u4dbf]/.test(arg): return true;
@@ -340,35 +325,17 @@ isKanji = function(arg) {
     }    
 }
 
-unload = function(message) {    
+function unload(message) {    
     for (var i in message) {
         if (message[i].toLowerCase() == module.moduleCode.toLowerCase()) {
-            logger.info("Unload command received");
+            this.logger.info("Unload command received");
             client.end();
             return;
         }
     }    
 }
 
-client.on('data', function(data) {    
-    try { 
-        var message = JSON.parse(data.toString());        
-        var to = message.to;
-        var nick = message.nick;
-        var textArray = message.text.split(" ");        
-        var command = textArray[0];
-        var args = textArray.slice(1,textArray.length);
-        switch (command) {
-            case "!t": translate(message, args); break;
-            case "!dict": dict(nick, args); break;
-            //case "!unload": unload(args); break;
-            default: logger.warning("Unrecognised command");
-        }
-    } catch(e) {
-        logger.error(e);        
-    }    
-});
+client.on('!t', translate);
+client.on('!dict', dict);
 
-client.on('end', function() {
-    logger.warning("Client shutting down...");
-});
+client.connect(20000);
