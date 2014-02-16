@@ -85,10 +85,10 @@ var handler = function(message) {
                     client.logger.error('Diff: ' + diff);
                 }
                 if (diff > channeldb.record.diff) {
-                    channeldb.record.nick = message.nick;
+                    channeldb.record.nick = channeldb.current;
                     channeldb.record.diff = diff;
                     channeldb.record.time = string;
-                    client.sendText(message.to, '\x0304New record! \x0F\x0303' + message.nick);
+                    client.sendText(message.to, '\x0304New record! \x0F\x0303' + channeldb.current);
                 }
                 channeldb.current = message.nick;
                 channeldb.time = currentTime;
