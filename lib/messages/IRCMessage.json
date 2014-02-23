@@ -4,6 +4,7 @@
 	"motd": null,
 	"nick": null,
 	"nicks": null,
+	"ctcptype": null,
 	"to": null,
 	"channel": null,	
 	"channels": null,
