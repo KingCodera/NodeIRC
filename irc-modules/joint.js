@@ -71,7 +71,10 @@ var handler = function(message) {
         } else {
             var current = channeldb.current;
             var currentTime = new Date();
-            if (current === message.nick) { return; }
+            if (current === message.nick) { 
+                client.sendNotice(message.nick, 'You already have it!');
+                return;
+            }
             var nickTimer = new Date(channeldb.timers[message.nick]);
             if (channeldb.timers[message.nick] === undefined || currentTime - nickTimer > nickCooldown) {                
                 var oldTime = new Date(channeldb.time);
@@ -97,6 +100,7 @@ var handler = function(message) {
                 writedb();
             } else {
                 // Send notice to user?
+                client.sendNotice(message.nick, 'You have had quite enough dear sir/madam.');
             }         
         }
     } else {
