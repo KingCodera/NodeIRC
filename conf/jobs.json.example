@@ -1,0 +1,388 @@
+{
+    "staff": [
+        {
+            "Name": "Orillion",
+            "tasks": [
+                {
+                    "ID": "GTO1",
+                    "type": "Encode"
+                },
+                {
+                    "ID": "GTO2",
+                    "type": "Encode"
+                },
+                {
+                    "ID": "GTO3",
+                    "type": "Encode"
+                },
+                {
+                    "ID": "GTO4",
+                    "type": "Encode"
+                }
+            ]
+        },
+        {
+            "Name": "Termascur",
+            "tasks": [
+                {
+                    "ID": "GTO1",
+                    "type": "TLC"
+                },
+                {
+                    "ID": "GTO2",
+                    "type": "TLC"
+                },
+                {
+                    "ID": "GTO3",
+                    "type": "TLC"
+                },
+                {
+                    "ID": "GTO4",
+                    "type": "TLC"
+                }
+            ]
+        },
+        {
+            "Name": "TheThing|24-7",
+            "tasks": [
+                {
+                    "ID": "GTO1",
+                    "type": "RIP"
+                },
+                {
+                    "ID": "GTO2",
+                    "type": "RIP"
+                },
+                {
+                    "ID": "GTO3",
+                    "type": "RIP"
+                },
+                {
+                    "ID": "GTO4",
+                    "type": "RIP"
+                },
+                {
+                    "ID": "GTO1",
+                    "type": "OCR"
+                },
+                {
+                    "ID": "GTO2",
+                    "type": "OCR"
+                },
+                {
+                    "ID": "GTO3",
+                    "type": "OCR"
+                },
+                {
+                    "ID": "GTO4",
+                    "type": "OCR"
+                }
+            ]
+        },
+        {
+            "Name": "Lucidity",
+            "tasks": [
+                {
+                    "ID": "GTO1",
+                    "type": "QC"
+                },
+                {
+                    "ID": "GTO2",
+                    "type": "QC"
+                },
+                {
+                    "ID": "GTO3",
+                    "type": "QC"
+                },
+                {
+                    "ID": "GTO1",
+                    "type": "Edit"
+                }
+            ]
+        },
+        {
+            "Name": "loomy",
+            "tasks": [
+                {
+                    "ID": "GTO1",
+                    "type": "QC"
+                },
+                {
+                    "ID": "GTO2",
+                    "type": "QC"
+                },
+                {
+                    "ID": "GTO3",
+                    "type": "QC"
+                },
+                {
+                    "ID": "GTO4",
+                    "type": "QC"
+                }
+            ]
+        },
+        {
+            "Name": "xMythycle",
+            "tasks": [
+                {
+                    "ID": "GTO4",
+                    "type": "Time"
+                },
+                {
+                    "ID": "GTO3",
+                    "type": "Time"
+                },
+                {
+                    "ID": "GTO2",
+                    "type": "Time"
+                },
+                {
+                    "ID": "GTO1",
+                    "type": "Time"
+                }
+            ]
+        }
+    ],
+    "tasks": [
+        {
+            "type": "RIP",
+            "staff": [
+                "TheThing|24-7"
+            ]
+        },
+        {
+            "type": "OCR",
+            "staff": [
+                "TheThing|24-7"
+            ]
+        },
+        {
+            "type": "Encode",
+            "staff": [
+                "TheThing|24-7"
+            ]
+        },
+        {
+            "type": "TLC",
+            "staff": [
+                "TheThing|24-7"
+            ]
+        },
+        {
+            "type": "Time",
+            "staff": [
+                "TheThing|24-7"
+            ]
+        },
+        {
+            "type": "Edit",
+            "staff": [
+                "TheThing|24-7"
+            ]
+        },
+        {
+            "type": "QC",
+            "staff": [
+                "TheThing|24-7"
+            ]
+        },
+        {
+            "type": "Release",
+            "staff": [
+                "TheThing|24-7"
+            ]
+        },
+        {
+            "type": "RIP",
+            "staff": [
+                "TheThing|24-7"
+            ]
+        }
+    ],
+    "episodes": [
+        {
+            "ID": "GTO1",
+            "Name": "GTO Taiwan 01",
+            "tasks": [
+                {
+                    "type": "RIP",
+                    "staff": "TheThing|24-7",
+                    "status": true
+                },
+                {
+                    "type": "OCR",
+                    "staff": "TheThing|24-7",
+                    "status": true
+                },
+                {
+                    "type": "Encode",
+                    "staff": "Orillion",
+                    "status": false
+                },
+                {
+                    "type": "TLC",
+                    "staff": "Termascur",
+                    "status": false
+                },
+                {
+                    "type": "Time",
+                    "staff": "xMythycle",
+                    "status": false
+                },
+                {
+                    "type": "Edit",
+                    "staff": "Lucidity",
+                    "status": false
+                },
+                {
+                    "type": "QC",
+                    "staff": "loomy",
+                    "status": false
+                },
+                {
+                    "type": "Release",
+                    "staff": "~Unknown",
+                    "status": false
+                }
+            ]
+        },
+        {
+            "ID": "GTO2",
+            "Name": "GTO Taiwan 02",
+            "tasks": [
+                {
+                    "type": "RIP",
+                    "staff": "TheThing|24-7",
+                    "status": true
+                },
+                {
+                    "type": "OCR",
+                    "staff": "TheThing|24-7",
+                    "status": true
+                },
+                {
+                    "type": "Encode",
+                    "staff": "Orillion",
+                    "status": false
+                },
+                {
+                    "type": "TLC",
+                    "staff": "Termascur",
+                    "status": false
+                },
+                {
+                    "type": "Time",
+                    "staff": "xMythycle",
+                    "status": false
+                },
+                {
+                    "type": "Edit",
+                    "staff": "Lucidity",
+                    "status": false
+                },
+                {
+                    "type": "QC",
+                    "staff": "loomy",
+                    "status": false
+                },
+                {
+                    "type": "Release",
+                    "staff": "~Unknown",
+                    "status": false
+                }
+            ]
+        },
+        {
+            "ID": "GTO3",
+            "Name": "GTO Taiwan 03",
+            "tasks": [
+                {
+                    "type": "RIP",
+                    "staff": "TheThing|24-7",
+                    "status": true
+                },
+                {
+                    "type": "OCR",
+                    "staff": "TheThing|24-7",
+                    "status": true
+                },
+                {
+                    "type": "Encode",
+                    "staff": "Orillion",
+                    "status": false
+                },
+                {
+                    "type": "TLC",
+                    "staff": "Termascur",
+                    "status": false
+                },
+                {
+                    "type": "Time",
+                    "staff": "xMythycle",
+                    "status": false
+                },
+                {
+                    "type": "Edit",
+                    "staff": "Lucidity",
+                    "status": false
+                },
+                {
+                    "type": "QC",
+                    "staff": "loomy",
+                    "status": false
+                },
+                {
+                    "type": "Release",
+                    "staff": "~Unknown",
+                    "status": false
+                }
+            ]
+        },
+        {
+            "ID": "GTO4",
+            "Name": "GTO Taiwan 04",
+            "tasks": [
+                {
+                    "type": "RIP",
+                    "staff": "TheThing|24-7",
+                    "status": true
+                },
+                {
+                    "type": "OCR",
+                    "staff": "TheThing|24-7",
+                    "status": true
+                },
+                {
+                    "type": "Encode",
+                    "staff": "Orillion",
+                    "status": false
+                },
+                {
+                    "type": "TLC",
+                    "staff": "Termascur",
+                    "status": false
+                },
+                {
+                    "type": "Time",
+                    "staff": "xMythycle",
+                    "status": false
+                },
+                {
+                    "type": "Edit",
+                    "staff": "Lucidity",
+                    "status": false
+                },
+                {
+                    "type": "QC",
+                    "staff": "loomy",
+                    "status": false
+                },
+                {
+                    "type": "Release",
+                    "staff": "~Unknown",
+                    "status": false
+                }
+            ]
+        }
+    ]
+}
