@@ -25,3 +25,7 @@ bin
 conf/*.json
 irc-modules/test.js
 irc-modules/test2.js
+irc-modules/RSSFeedMezashite.js
+irc-modules/bannerVote - Copy.js
+irc-modules/downloadCounter.js
+irc-modules/jobtrackertest.js
