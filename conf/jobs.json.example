@@ -8,12 +8,20 @@
                     "type": "Encode"
                 },
                 {
+                    "ID": "GTO1",
+                    "type": "Style"
+                },
+                {
                     "ID": "GTO2",
-                    "type": "Encode"
+                    "type": "Style"
                 },
                 {
                     "ID": "GTO3",
-                    "type": "Encode"
+                    "type": "Style"
+                },
+                {
+                    "ID": "GTO4",
+                    "type": "Style"
                 },
                 {
                     "ID": "GTO4",
@@ -76,6 +84,42 @@
                 {
                     "ID": "GTO4",
                     "type": "OCR"
+                },
+                {
+                    "ID": "GTO1",
+                    "type": "Time-CN"
+                },
+                {
+                    "ID": "GTO2",
+                    "type": "Time-CN"
+                },
+                {
+                    "ID": "GTO3",
+                    "type": "Time-CN"
+                },
+                {
+                    "ID": "GTO4",
+                    "type": "Time-CN"
+                },
+                {
+                    "ID": "GTO2",
+                    "type": "Encode"
+                },
+                {
+                    "ID": "GTO1",
+                    "type": "TS"
+                },
+                {
+                    "ID": "GTO2",
+                    "type": "TS"
+                },
+                {
+                    "ID": "GTO3",
+                    "type": "TS"
+                },
+                {
+                    "ID": "GTO4",
+                    "type": "TS"
                 }
             ]
         },
@@ -84,19 +128,19 @@
             "tasks": [
                 {
                     "ID": "GTO1",
-                    "type": "QC"
+                    "type": "Edit"
                 },
                 {
                     "ID": "GTO2",
-                    "type": "QC"
+                    "type": "Edit"
                 },
                 {
                     "ID": "GTO3",
-                    "type": "QC"
+                    "type": "Edit"
                 },
                 {
-                    "ID": "GTO1",
-                    "type": "Edit"
+                    "ID": "GTO4",
+                    "type": "QC"
                 }
             ]
         },
@@ -113,10 +157,6 @@
                 },
                 {
                     "ID": "GTO3",
-                    "type": "QC"
-                },
-                {
-                    "ID": "GTO4",
                     "type": "QC"
                 }
             ]
@@ -139,63 +179,41 @@
                 {
                     "ID": "GTO1",
                     "type": "Time"
+                },
+                {
+                    "ID": "GTO3",
+                    "type": "Encode"
                 }
             ]
-        }
-    ],
-    "tasks": [
+        },
         {
-            "type": "RIP",
-            "staff": [
-                "TheThing|24-7"
+            "Name": "xUnknownOrchestra",
+            "tasks": [
+                {
+                    "ID": "GTO1",
+                    "type": "TLC-CN"
+                },
+                {
+                    "ID": "GTO2",
+                    "type": "TLC-CN"
+                },
+                {
+                    "ID": "GTO3",
+                    "type": "TLC-CN"
+                },
+                {
+                    "ID": "GTO4",
+                    "type": "TLC-CN"
+                }
             ]
         },
         {
-            "type": "OCR",
-            "staff": [
-                "TheThing|24-7"
-            ]
-        },
-        {
-            "type": "Encode",
-            "staff": [
-                "TheThing|24-7"
-            ]
-        },
-        {
-            "type": "TLC",
-            "staff": [
-                "TheThing|24-7"
-            ]
-        },
-        {
-            "type": "Time",
-            "staff": [
-                "TheThing|24-7"
-            ]
-        },
-        {
-            "type": "Edit",
-            "staff": [
-                "TheThing|24-7"
-            ]
-        },
-        {
-            "type": "QC",
-            "staff": [
-                "TheThing|24-7"
-            ]
-        },
-        {
-            "type": "Release",
-            "staff": [
-                "TheThing|24-7"
-            ]
-        },
-        {
-            "type": "RIP",
-            "staff": [
-                "TheThing|24-7"
+            "Name": "ShijouTakane",
+            "tasks": [
+                {
+                    "ID": "GTO4",
+                    "type": "Edit"
+                }
             ]
         }
     ],
@@ -215,34 +233,59 @@
                     "status": true
                 },
                 {
-                    "type": "Encode",
-                    "staff": "Orillion",
-                    "status": false
-                },
-                {
                     "type": "TLC",
                     "staff": "Termascur",
-                    "status": false
+                    "status": true
                 },
                 {
                     "type": "Time",
                     "staff": "xMythycle",
-                    "status": false
+                    "status": true
                 },
                 {
                     "type": "Edit",
                     "staff": "Lucidity",
-                    "status": false
+                    "status": true
                 },
                 {
                     "type": "QC",
                     "staff": "loomy",
-                    "status": false
+                    "status": true
                 },
                 {
                     "type": "Release",
                     "staff": "~Unknown",
                     "status": false
+                },
+                {
+                    "type": "TLC-CN",
+                    "staff": "xUnknownOrchestra",
+                    "status": true
+                },
+                {
+                    "type": "Encode",
+                    "staff": "~Unknown",
+                    "status": true
+                },
+                {
+                    "type": "Style",
+                    "staff": "Orillion",
+                    "status": true
+                },
+                {
+                    "type": "Time-CN",
+                    "staff": "TheThing|24-7",
+                    "status": true
+                },
+                {
+                    "type": "TS",
+                    "staff": "TheThing|24-7",
+                    "status": true
+                },
+                {
+                    "type": "TS-fix",
+                    "staff": "~Unknown",
+                    "status": true
                 }
             ]
         },
@@ -261,34 +304,54 @@
                     "status": true
                 },
                 {
-                    "type": "Encode",
-                    "staff": "Orillion",
-                    "status": false
-                },
-                {
                     "type": "TLC",
                     "staff": "Termascur",
-                    "status": false
+                    "status": true
                 },
                 {
                     "type": "Time",
                     "staff": "xMythycle",
-                    "status": false
+                    "status": true
                 },
                 {
                     "type": "Edit",
                     "staff": "Lucidity",
-                    "status": false
+                    "status": true
                 },
                 {
                     "type": "QC",
                     "staff": "loomy",
-                    "status": false
+                    "status": true
                 },
                 {
                     "type": "Release",
                     "staff": "~Unknown",
                     "status": false
+                },
+                {
+                    "type": "TLC-CN",
+                    "staff": "xUnknownOrchestra",
+                    "status": true
+                },
+                {
+                    "type": "Encode",
+                    "staff": "TheThing|24-7",
+                    "status": true
+                },
+                {
+                    "type": "Style",
+                    "staff": "Orillion",
+                    "status": true
+                },
+                {
+                    "type": "Time-CN",
+                    "staff": "TheThing|24-7",
+                    "status": true
+                },
+                {
+                    "type": "TS",
+                    "staff": "TheThing|24-7",
+                    "status": true
                 }
             ]
         },
@@ -307,34 +370,54 @@
                     "status": true
                 },
                 {
-                    "type": "Encode",
-                    "staff": "Orillion",
-                    "status": false
-                },
-                {
                     "type": "TLC",
                     "staff": "Termascur",
-                    "status": false
+                    "status": true
                 },
                 {
                     "type": "Time",
                     "staff": "xMythycle",
-                    "status": false
+                    "status": true
                 },
                 {
                     "type": "Edit",
                     "staff": "Lucidity",
-                    "status": false
+                    "status": true
                 },
                 {
                     "type": "QC",
                     "staff": "loomy",
-                    "status": false
+                    "status": true
                 },
                 {
                     "type": "Release",
                     "staff": "~Unknown",
                     "status": false
+                },
+                {
+                    "type": "TLC-CN",
+                    "staff": "xUnknownOrchestra",
+                    "status": true
+                },
+                {
+                    "type": "Encode",
+                    "staff": "xMythycle",
+                    "status": true
+                },
+                {
+                    "type": "Style",
+                    "staff": "Orillion",
+                    "status": true
+                },
+                {
+                    "type": "Time-CN",
+                    "staff": "TheThing|24-7",
+                    "status": true
+                },
+                {
+                    "type": "TS",
+                    "staff": "TheThing|24-7",
+                    "status": true
                 }
             ]
         },
@@ -353,34 +436,54 @@
                     "status": true
                 },
                 {
-                    "type": "Encode",
-                    "staff": "Orillion",
-                    "status": false
-                },
-                {
                     "type": "TLC",
                     "staff": "Termascur",
-                    "status": false
+                    "status": true
                 },
                 {
                     "type": "Time",
                     "staff": "xMythycle",
-                    "status": false
+                    "status": true
                 },
                 {
                     "type": "Edit",
-                    "staff": "Lucidity",
-                    "status": false
+                    "staff": "ShijouTakane",
+                    "status": true
                 },
                 {
                     "type": "QC",
-                    "staff": "loomy",
-                    "status": false
+                    "staff": "Lucidity",
+                    "status": true
                 },
                 {
                     "type": "Release",
                     "staff": "~Unknown",
                     "status": false
+                },
+                {
+                    "type": "TLC-CN",
+                    "staff": "xUnknownOrchestra",
+                    "status": true
+                },
+                {
+                    "type": "Encode",
+                    "staff": "Orillion",
+                    "status": true
+                },
+                {
+                    "type": "Style",
+                    "staff": "Orillion",
+                    "status": true
+                },
+                {
+                    "type": "Time-CN",
+                    "staff": "TheThing|24-7",
+                    "status": true
+                },
+                {
+                    "type": "TS",
+                    "staff": "TheThing|24-7",
+                    "status": true
                 }
             ]
         }
